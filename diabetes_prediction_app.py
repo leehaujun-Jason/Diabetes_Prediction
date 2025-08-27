@@ -3,8 +3,8 @@ import numpy as np
 import joblib
 
 # Load models
-log_reg = joblib.load("models/logistic_model.pkl")
-knn = joblib.load("models/knn_model.pkl")
+log_reg = joblib.load("logistic_model.pkl")
+knn = joblib.load("knn_model.pkl")
 
 st.title("🩺 Diabetes Prediction App")
 st.write("This app predicts the likelihood of diabetes using **Logistic Regression** and **KNN** models.")
@@ -39,3 +39,4 @@ if st.button("Predict"):
     st.write(f"**KNN Prediction:** {result_knn}")
     
     st.info("Note: Predictions are based on trained models and should not replace professional medical advice.")
+
