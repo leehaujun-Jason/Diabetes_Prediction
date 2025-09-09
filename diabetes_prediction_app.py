@@ -3,9 +3,9 @@ import numpy as np
 import joblib
 
 # Load models and scaler
-knn = joblib.load("models/knn_model.pkl")
-ann = joblib.load("models/ann_model.pkl")
-scaler = joblib.load("models/scaler.pkl")
+knn = joblib.load("knn_model.pkl")
+ann = joblib.load("ann_model.pkl")
+scaler = joblib.load("scaler.pkl")
 
 st.title("🩺 Diabetes Prediction App")
 st.write("This app predicts the likelihood of diabetes using **KNN** and **ANN** models.")
@@ -50,3 +50,4 @@ if st.button("Predict"):
     st.write(f"**ANN Prediction:** {result_ann_str}")
     
     st.info("Note: Predictions are based on trained models and should not replace professional medical advice.")
+
