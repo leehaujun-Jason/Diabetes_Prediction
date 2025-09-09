@@ -2,12 +2,13 @@ import streamlit as st
 import numpy as np
 import joblib
 
-# Load models
-log_reg = joblib.load("logistic_model.pkl")
-knn = joblib.load("knn_model.pkl")
+# Load models and scaler
+knn = joblib.load("models/knn_model.pkl")
+ann = joblib.load("models/ann_model.pkl")
+scaler = joblib.load("models/scaler.pkl")
 
 st.title("🩺 Diabetes Prediction App")
-st.write("This app predicts the likelihood of diabetes using **Logistic Regression** and **KNN** models.")
+st.write("This app predicts the likelihood of diabetes using **KNN** and **ANN** models.")
 
 # User input form
 st.header("Enter Patient Details:")
@@ -24,20 +25,28 @@ age = st.number_input("Age (years):", min_value=1, max_value=100, value=30)
 # Prepare input
 input_data = np.array([[pregnancies, glucose, blood_pressure, skin_thickness, insulin, bmi, dpf, age]])
 
+# Scale input with the SAME scaler used during training
+input_scaled = scaler.transform(input_data)
+
 # Prediction button
 if st.button("Predict"):
-    # Logistic Regression prediction
-    pred_lr = log_reg.predict(input_data)[0]
-    result_lr = "Diabetic" if pred_lr == 1 else "Not Diabetic"
     
-    # KNN prediction
-    pred_knn = knn.predict(input_data)[0]
-    result_knn = "Diabetic" if pred_knn == 1 else "Not Diabetic"
+    # === KNN prediction ===
+    pred_knn = knn.predict(input_scaled)[0]
+    pred_proba_knn = knn.predict_proba(input_scaled)[0][1]  # probability of being diabetic
+    result_knn_str = "Diabetic" if pred_knn == 1 else "Not Diabetic"
+
+    # === ANN prediction ===
+    pred_proba_ann = ann.predict(input_scaled)[0][0]  # ANN usually returns [[prob]]
+    pred_ann = int(pred_proba_ann >= 0.5)
+    result_ann_str = "Diabetic" if pred_ann == 1 else "Not Diabetic"
     
+    # === Display results ===
     st.subheader("Results")
-    st.write(f"**Logistic Regression Prediction:** {result_lr}")
-    st.write(f"**KNN Prediction:** {result_knn}")
+    st.write(f"**KNN Probability of Diabetes:** {pred_proba_knn:.3f}")
+    st.write(f"**KNN Prediction:** {result_knn_str}")
+    st.write("---")
+    st.write(f"**ANN Probability of Diabetes:** {pred_proba_ann:.3f}")
+    st.write(f"**ANN Prediction:** {result_ann_str}")
     
     st.info("Note: Predictions are based on trained models and should not replace professional medical advice.")
-
-
