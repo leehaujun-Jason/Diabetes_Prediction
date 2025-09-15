@@ -4,7 +4,10 @@ import joblib
 
 # Load models and scaler
 knn = joblib.load("knn_model.pkl")
-ann = joblib.load("ann_model.pkl")
+#ann = joblib.load("ann_model.pkl")
+from tensorflow.keras.models import load_model
+ann = load_model("ann_model_keras.keras")
+
 scaler = joblib.load("scaler.pkl")
 
 st.title("🩺 Diabetes Prediction App")
@@ -50,4 +53,5 @@ if st.button("Predict"):
     st.write(f"**ANN Prediction:** {result_ann_str}")
     
     st.info("Note: Predictions are based on trained models and should not replace professional medical advice.")
+
 
