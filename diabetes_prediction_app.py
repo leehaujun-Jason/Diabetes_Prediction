@@ -1,12 +1,14 @@
 import streamlit as st
 import numpy as np
 import joblib
+from tensorflow.keras.models import load_model
 
 # Load models and scaler
 knn = joblib.load("knn_model.pkl")
-ann = joblib.load("annes_model.pkl")
+#ann = joblib.load("annes_model.pkl")
 #from tensorflow.keras.models import load_model
 #ann = load_model("ann_model_keras.keras")
+ann = load_model("ann_model.h5")
 
 scaler = joblib.load("scaler.pkl")
 
@@ -53,6 +55,7 @@ if st.button("Predict"):
     st.write(f"**ANN Prediction:** {result_ann_str}")
     
     st.info("Note: Predictions are based on trained models and should not replace professional medical advice.")
+
 
 
 
